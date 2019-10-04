@@ -1,9 +1,21 @@
+const http = require('http')
+
 /**
  * this is also just a fake repsonse etc...
  */
 function request(url, callback) {
 	console.log(`Posting to url ${url}`)
-	return callback('Success!')
+	let data = ''
+
+	http.get(url, (res) => {
+		res.on('data', (chunk) => {
+			data += chunk
+		})
+
+		res.on('end', () => {
+			callback(JSON.parse(data).payload)
+		})
+	})
 }
 
 /**
